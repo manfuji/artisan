@@ -82,14 +82,14 @@ const HomePage = () => {
               </TouchableOpacity>
               <View
                 style={tw('')}
-                onPress={() => navigator.navigate('DetailPage')}
+                // onPress={() => navigator.navigate('DetailPage')}
               >
                 <Image style={tw('w-64 h-32 m-1 rounded-md')} source={shop1} />
                 <Text style={tw('text-base')}>Fuel Station</Text>
               </View>
               <View
                 style={tw('')}
-                onPress={() => navigator.navigate('DetailPage')}
+                // onPress={() => navigator.navigate('DetailPage')}
               >
                 <Image style={tw('w-64 h-32 m-1 rounded-md')} source={shop} />
                 <Text style={tw('text-base')}>Mechanic</Text>

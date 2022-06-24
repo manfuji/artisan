@@ -33,14 +33,14 @@
   margin-bottom: 2rem
 }
 
-.my-1 {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto
+}
+
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem
 }
 
 .ml-1 {
@@ -123,6 +123,10 @@
   height: 200px
 }
 
+.h-1\/2 {
+  height: 50%
+}
+
 .h-24 {
   height: 6rem
 }
@@ -137,14 +141,6 @@
 
 .h-56 {
   height: 14rem
-}
-
-.h-1\/2 {
-  height: 50%
-}
-
-.h-\[100px\] {
-  height: 100px
 }
 
 .w-64 {
@@ -169,10 +165,6 @@
 
 .w-44 {
   width: 11rem
-}
-
-.w-1\/2 {
-  width: 50%
 }
 
 .flex-row {
@@ -234,6 +226,11 @@
   background-color: rgb(87 6 6 / var(--tw-bg-opacity))
 }
 
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity))
+}
+
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity))
@@ -249,13 +246,12 @@
   background-color: rgb(243 244 246 / var(--tw-bg-opacity))
 }
 
-.bg-gray-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity))
-}
-
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5
+}
+
+.p-5 {
+  padding: 1.25rem
 }
 
 .p-1\.5 {
@@ -264,18 +260,6 @@
 
 .p-1 {
   padding: 0.25rem
-}
-
-.p-0\.5 {
-  padding: 0.125rem
-}
-
-.p-0 {
-  padding: 0px
-}
-
-.p-5 {
-  padding: 1.25rem
 }
 
 .py-3 {
@@ -331,6 +315,11 @@
   line-height: 2rem
 }
 
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem
+}
+
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem
@@ -339,11 +328,6 @@
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem
-}
-
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem
 }
 
 .font-semibold {
@@ -368,14 +352,19 @@
   color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 
-.text-gray-600 {
-  --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity))
-}
-
 .text-\[\#570606\] {
   --tw-text-opacity: 1;
   color: rgb(87 6 6 / var(--tw-text-opacity))
+}
+
+.text-green-600 {
+  --tw-text-opacity: 1;
+  color: rgb(22 163 74 / var(--tw-text-opacity))
+}
+
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity))
 }
 
 .text-red-800 {
@@ -388,23 +377,6 @@
   color: rgb(55 65 81 / var(--tw-text-opacity))
 }
 
-.text-transparent {
-  color: transparent
-}
-
-.text-green-600 {
-  --tw-text-opacity: 1;
-  color: rgb(22 163 74 / var(--tw-text-opacity))
-}
-
 .opacity-80 {
   opacity: 0.8
-}
-
-.opacity-90 {
-  opacity: 0.9
-}
-
-.opacity-50 {
-  opacity: 0.5
 }

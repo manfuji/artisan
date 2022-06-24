@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TextInput,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTailwind } from 'tailwind-rn/dist';
@@ -55,6 +56,7 @@ const DetailPage = () => {
     for (let index = 1; index <= rate; index++) {
       displayRate.push(
         <FontAwesomeIcon
+          key={index}
           style={tw(' flex flex-row text-[#570606] m-1')}
           icon={faStar}
         />
@@ -168,6 +170,7 @@ const DetailPage = () => {
                           style={tw(
                             'bg-[#570606] w-32 text-center  py-3 px-4 text-white rounded-xl m-2'
                           )}
+                          onPress={() => Linking.openURL(`tel:${data.phone}`)}
                         >
                           <Text
                             style={tw('text-white text-lg text-center w-full')}
@@ -210,6 +213,7 @@ const DetailPage = () => {
                           style={tw(
                             'bg-[#570606] w-32 text-center  py-3 px-4 text-white rounded-xl m-2'
                           )}
+                          onPress={() => Linking.openURL(`tel:${data.phone}`)}
                         >
                           <Text
                             style={tw('text-white text-lg text-center w-full')}
@@ -266,6 +270,9 @@ const DetailPage = () => {
                               style={tw(
                                 'bg-[#570606] w-32 text-center  py-3 px-4 text-white rounded-xl m-2'
                               )}
+                              onPress={() =>
+                                Linking.openURL(`tel:${data.phone}`)
+                              }
                             >
                               <Text
                                 style={tw(
@@ -315,6 +322,9 @@ const DetailPage = () => {
                               style={tw(
                                 'bg-[#570606] w-32 text-center  py-3 px-4 text-white rounded-xl m-2'
                               )}
+                              onPress={() =>
+                                Linking.openURL(`tel:${data.phone}`)
+                              }
                             >
                               <Text
                                 style={tw(
