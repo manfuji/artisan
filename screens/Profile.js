@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import cover from '../assets/images/cover3.jpg';
@@ -22,7 +23,12 @@ import logo2 from '../assets/logo.jpg';
 const Profile = () => {
   const tw = useTailwind();
   const [{ user, stateProfile }, dispatch] = useStateValue();
-  const [userProfile, setUserProfile] = useState({});
+  const [userProfile, setUserProfile] = useState({}),
+    [cPassword, setCPassword] = useState(''),
+    [email, setEmail] = useState(''),
+    [bio, setBio] = useState(''),
+    [password, setPassword] = useState('');
+
   useEffect(() => {
     axios
       .get(
@@ -94,6 +100,58 @@ const Profile = () => {
             <Text style={tw('text-lg')}>{stateProfile?.description}</Text>
           </View>
           <View style={tw('w-[90%] flex mt-4 justify-center items-center')}>
+            <View style={tw('w-full flex')}>
+              <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
+                Biography
+              </Text>
+              <TextInput
+                style={tw(
+                  'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
+                )}
+                placeholder="eg. i love to shop... "
+                value={bio}
+                onChangeText={(text) => setBio(text)}
+              />
+            </View>
+            <View style={tw('w-full flex')}>
+              <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
+                Email
+              </Text>
+              <TextInput
+                style={tw(
+                  'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
+                )}
+                placeholder="Email "
+                value={user.user.email}
+                onChangeText={(text) => setEmail(text)}
+              />
+            </View>
+            <View style={tw('w-full flex')}>
+              <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
+                Password
+              </Text>
+              <TextInput
+                style={tw(
+                  'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
+                )}
+                placeholder="Password "
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+              />
+            </View>
+            <View style={tw('w-full flex')}>
+              <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
+                Comfirm Password
+              </Text>
+              <TextInput
+                style={tw(
+                  'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
+                )}
+                placeholder="Password "
+                value={cPassword}
+                onChangeText={(text) => setCPassword(text)}
+              />
+            </View>
             <TouchableOpacity
               style={tw(
                 'bg-[#570606] w-full mt-5 text-center  py-3 px-4 text-white rounded-xl m-2'

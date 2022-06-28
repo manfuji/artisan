@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTailwind } from 'tailwind-rn';
@@ -14,6 +15,7 @@ import { RadioButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useStateValue } from '../context/StateContext';
+import Toast from 'react-native-simple-toast';
 
 const Register = () => {
   const tw = useTailwind();
@@ -22,7 +24,8 @@ const Register = () => {
     [email, setEmail] = useState(''),
     [password, setPassword] = useState(''),
     [confirmPassword, setConfirmPassword] = useState(''),
-    [privacy, setPrivacy] = useState(false);
+    [privacy, setPrivacy] = useState(false),
+    [loading, setLoading] = useState(false);
 
   const [{ user }, dispatch] = useStateValue();
   const handleSubmit = () => {
@@ -32,30 +35,44 @@ const Register = () => {
       password,
     };
     if (!username || !email || !password) {
-      alert('All the fields are required');
+      Toast.show(Toast.TOP, Toast.LONG, 'All the fields are required');
     } else if (password !== confirmPassword) {
-      alert('Please your password do not match');
+      Toast.show(Toast.TOP, Toast.LONG, 'Please your password do not match');
     } else if (password.length < 6) {
-      alert('Please your password must be more than 6 secret');
+      Toast.show(
+        Toast.TOP,
+        Toast.LONG,
+        'Please your password must be more than 6 secret'
+      );
     } else if (!privacy) {
-      alert('Please agree to the terms and conditions  ');
+      Toast.show(
+        Toast.TOP,
+        Toast.LONG,
+        'Please agree to the terms and conditions  '
+      );
     } else {
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       };
+      setLoading(true);
+
       const url = 'https://artisanshub.pythonanywhere.com/api/auth/register';
       console.log(username, password, email);
       axios
         .post(url, body)
         .then((res) => {
+          setLoading(false);
+
           console.log(user);
           console.log(res.data);
           navigator.navigate('Login');
         })
         .catch((err) => {
-          alert(err.message);
+          setLoading(false);
+
+          Toast.show(err.message);
           console.log(err);
         });
     }
@@ -139,16 +156,20 @@ const Register = () => {
             </Text>
           </View>
           <View style={tw('w-full')}>
-            <TouchableOpacity
-              style={tw('bg-[#570606] mt-6 rounded-xl')}
-              onPress={() => handleSubmit()}
-            >
-              <Text
-                style={tw('text-white text-center font-bold text-2xl py-2 ')}
+            {loading ? (
+              <ActivityIndicator size="large" color="#570606" />
+            ) : (
+              <TouchableOpacity
+                style={tw('bg-[#570606] mt-6 rounded-xl')}
+                onPress={() => handleSubmit()}
               >
-                Register
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={tw('text-white text-center font-bold text-2xl py-2 ')}
+                >
+                  Register
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={tw('w-full flex mt-2')}>
             <Text style={tw('text-xl ')}>

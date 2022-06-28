@@ -11,12 +11,13 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTailwind } from 'tailwind-rn/dist';
-import HeroImage from '../assets/images/shop1.jpg';
-import shop1 from '../assets/images/shop3.jpg';
-import shop from '../assets/images/shop5.jpg';
-import Card from './Card';
+// import HeroImage from '../assets/images/shop1.jpg';
+// import shop1 from '../assets/images/shop3.jpg';
+// import shop from '../assets/images/shop5.jpg';
+// import Card from './Card';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
+  faBackward,
   faLocationPin,
   faMagnifyingGlass,
   faMapLocation,
@@ -25,9 +26,10 @@ import {
 // import {} from "@fortawesome/free-regular-svg-icons"
 
 import NavBar from './NavBar';
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useStateValue } from '../context/StateContext';
+import { AirbnbRating } from 'react-native-ratings';
 
 const DetailPage = () => {
   const navigation = useNavigation();
@@ -40,8 +42,10 @@ const DetailPage = () => {
   console.log(stateData.params.catdetail);
   const data = stateData.params.catdetail;
   const id = stateData.params.catdetail.id;
-  const getDataFromState = company.filter((data) => data.id === id);
-  console.log('data', getDataFromState);
+  const getDataFromState = company.filter((data) => data.category.id === id);
+  // console.log('data', getDataFromState);
+
+  const baseUrl = 'https://artisanshub.pythonanywhere.com';
 
   // implemeting search
   const [search, setSearch] = useState('');
@@ -50,29 +54,31 @@ const DetailPage = () => {
     data.name.toLowerCase().includes(search.toLowerCase())
   );
   const tw = useTailwind();
-  const displayRate = [];
   const rating = (rate) => {
+    const displayRate = [];
     // return()
     for (let index = 1; index <= rate; index++) {
       displayRate.push(
         <FontAwesomeIcon
-          key={index}
+          // key={index}
           style={tw(' flex flex-row text-[#570606] m-1')}
           icon={faStar}
+          key={index}
         />
       );
     }
     return displayRate;
   };
 
-  const unRated = [];
-  const UnRated = (rate) => {
+  const UnRated = (rateNo) => {
+    const unRated = [];
     // return()
-    for (let index = 1; index <= rate; index++) {
+    for (let index = 1; index <= rateNo; index++) {
       unRated.push(
         <FontAwesomeIcon
           style={tw(' flex flex-row text-green-600 m-1 opacity-80')}
           icon={faStar}
+          key={index}
         />
       );
     }
@@ -82,10 +88,20 @@ const DetailPage = () => {
     <SafeAreaView style={tw('w-full h-full flex pt-6')}>
       <ScrollView style={tw('w-full h-full')}>
         <ImageBackground
-          style={tw('w-full h-[200px] flex justify-center items-center')}
+          style={tw('w-full h-[200px] rounded-lg flex ')}
           source={{ uri: data.image }}
         >
-          <Text style={tw('text-white text-4xl bg-gray-800 bg-opacity-50 p-5')}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={tw('  m-1 bg-[#570606]  p-3 rounded-full w-10 h-10 ')}
+          >
+            <FontAwesomeIcon icon={faBackward} style={tw('text-white')} />
+          </TouchableOpacity>
+          <Text
+            style={tw(
+              'text-white justify-center items-center text-4xl bg-gray-800 bg-opacity-50 p-5'
+            )}
+          >
             [{data.title}]
           </Text>
         </ImageBackground>
@@ -112,18 +128,7 @@ const DetailPage = () => {
               )}
             />
           </View>
-          <View style={tw('w-full')}>
-            {/* <TouchableOpacity
-              style={tw('bg-[#570606] mt-6 rounded-xl')}
-              onPress={() => navigator.navigate('Home')}
-            >
-              <Text
-                style={tw('text-white text-center font-bold text-2xl py-2 ')}
-              >
-                Search
-              </Text>
-            </TouchableOpacity> */}
-          </View>
+          <View style={tw('w-full')}></View>
           <Text style={tw('mt-6 text-2xl font-semibold mr-4')}>
             Nearest To You{' '}
             <FontAwesomeIcon
@@ -141,13 +146,17 @@ const DetailPage = () => {
                 </Text>
               ) : search.length > 0 ? (
                 searchData.map((data) => (
-                  <View
+                  <TouchableOpacity
                     key={data.id}
                     style={tw('border border-gray-200 ml-1 rounded-xl')}
+                    onPress={() =>
+                      navigation.navigate('customerDetail', { details: data })
+                    }
                   >
                     <Image
                       style={tw('w-64 h-32 m-1 rounded-md')}
-                      source={{ uri: data.image }}
+                      source={{ uri: baseUrl + data.image }}
+                      resizeMode="cover"
                     />
 
                     <View style={tw('mx-2 ')}>
@@ -157,11 +166,29 @@ const DetailPage = () => {
                       <Text style={tw('text-gray-400 font-semibold')}>
                         @Aunty
                       </Text>
-                      <Text style={tw('text-lg')}>{data.description}</Text>
+                      <Text style={tw('text-lg')}>
+                        {data.description.substr(0, 20)}...
+                      </Text>
                       <View style={tw('flex flex-row text-[#570606]')}>
                         {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                        {rating(data.rating)}
-                        {UnRated(5 - data.rating)}
+                        {/* {rating(data.rating)}
+                        {UnRated(5 - data.rating)} */}
+                        <AirbnbRating
+                          count={5}
+                          // reviews={[
+                          //   'Terrible',
+                          //   'Bad',
+                          //   'OK',
+                          //   'Good',
+                          //   'Very Good',
+                          //   'Amazing',
+                          // ]}
+                          showRating={false}
+                          defaultRating={data.rating}
+                          // onFinishRating={ratingCompleted}
+                          size={20}
+                          isDisabled
+                        />
                       </View>
                       <View
                         style={tw('w-full flex justify-center items-center')}
@@ -180,17 +207,21 @@ const DetailPage = () => {
                         </TouchableOpacity>
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 ))
               ) : (
                 getDataFromState.map((data) => (
-                  <View
+                  <TouchableOpacity
                     key={data.id}
                     style={tw('border border-gray-200 ml-1 rounded-xl')}
+                    onPress={() =>
+                      navigation.navigate('customerDetail', { details: data })
+                    }
                   >
                     <Image
                       style={tw('w-64 h-32 m-1 rounded-md')}
-                      source={{ uri: data.image }}
+                      source={{ uri: baseUrl + data.image }}
+                      resizeMode="cover"
                     />
 
                     <View style={tw('mx-2 ')}>
@@ -200,11 +231,29 @@ const DetailPage = () => {
                       <Text style={tw('text-gray-400 font-semibold')}>
                         @Aunty
                       </Text>
-                      <Text style={tw('text-lg')}>{data.description}</Text>
+                      <Text style={tw('text-lg')}>
+                        {data.description.substr(0, 20)}...
+                      </Text>
                       <View style={tw('flex flex-row text-[#570606]')}>
                         {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                        {rating(data.rating)}
-                        {UnRated(5 - data.rating)}
+                        {/* {rating(data.rating)}
+                        {UnRated(5 - data.rating)} */}
+                        <AirbnbRating
+                          count={5}
+                          // reviews={[
+                          //   'Terrible',
+                          //   'Bad',
+                          //   'OK',
+                          //   'Good',
+                          //   'Very Good',
+                          //   'Amazing',
+                          // ]}
+                          showRating={false}
+                          defaultRating={data.rating}
+                          // onFinishRating={ratingCompleted}
+                          size={20}
+                          isDisabled
+                        />
                       </View>
                       <View
                         style={tw('w-full flex justify-center items-center')}
@@ -223,7 +272,7 @@ const DetailPage = () => {
                         </TouchableOpacity>
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 ))
               )}
             </View>
@@ -245,7 +294,8 @@ const DetailPage = () => {
                       >
                         <Image
                           style={tw('w-64 h-32 m-1 rounded-md')}
-                          source={{ uri: data.image }}
+                          source={{ uri: baseUrl + data.image }}
+                          resizeMode="cover"
                         />
 
                         <View style={tw('mx-2 ')}>
@@ -255,11 +305,30 @@ const DetailPage = () => {
                           <Text style={tw('text-gray-400 font-semibold')}>
                             @Aunty
                           </Text>
-                          <Text style={tw('text-lg')}>{data.description}</Text>
+                          <Text style={tw('text-lg')}>
+                            {' '}
+                            {data.description.substr(0, 20)}...
+                          </Text>
                           <View style={tw('flex flex-row text-[#570606]')}>
                             {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                            {rating(data.rating)}
-                            {UnRated(5 - data.rating)}
+                            {/* {rating(data.rating)}
+                            {UnRated(5 - data.rating)} */}
+                            <AirbnbRating
+                              count={5}
+                              showRating={false}
+                              // reviews={[
+                              //   'Terrible',
+                              //   'Bad',
+                              //   'OK',
+                              //   'Good',
+                              //   'Very Good',
+                              //   'Amazing',
+                              // ]}
+                              defaultRating={data.rating}
+                              // onFinishRating={ratingCompleted}
+                              size={20}
+                              isDisabled
+                            />
                           </View>
                           <View
                             style={tw(
@@ -297,7 +366,8 @@ const DetailPage = () => {
                       >
                         <Image
                           style={tw('w-64 h-32 m-1 rounded-md')}
-                          source={{ uri: data.image }}
+                          source={{ uri: baseUrl + data.image }}
+                          resizeMode="cover"
                         />
 
                         <View style={tw('mx-2 ')}>
@@ -307,11 +377,30 @@ const DetailPage = () => {
                           <Text style={tw('text-gray-400 font-semibold')}>
                             @Aunty
                           </Text>
-                          <Text style={tw('text-lg')}>{data.description}</Text>
+                          <Text style={tw('text-lg')}>
+                            {' '}
+                            {data.description.substr(0, 20)}...
+                          </Text>
                           <View style={tw('flex flex-row text-[#570606]')}>
                             {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                            {rating(data.rating)}
-                            {UnRated(5 - data.rating)}
+                            {/* {rating(data.rating)}
+                            {UnRated(5 - data.rating)} */}
+                            <AirbnbRating
+                              count={5}
+                              // reviews={[
+                              //   'Terrible',
+                              //   'Bad',
+                              //   'OK',
+                              //   'Good',
+                              //   'Very Good',
+                              //   'Amazing',
+                              // ]}
+                              showRating={false}
+                              defaultRating={data.rating}
+                              // onFinishRating={ratingCompleted}
+                              size={20}
+                              isDisabled
+                            />
                           </View>
                           <View
                             style={tw(

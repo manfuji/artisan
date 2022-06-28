@@ -20,7 +20,7 @@ const NavBar = () => {
     <SafeAreaView style={tw('w-full  bg-gray-200')}>
       <View
         style={tw(
-          'py-5 px-4 flex flex-row justify-between items-center text-[#570606]'
+          'py-4 px-5 flex flex-row justify-between items-center text-[#570606]'
         )}
       >
         <TouchableOpacity
@@ -29,7 +29,7 @@ const NavBar = () => {
         >
           <FontAwesomeIcon
             icon={faHome}
-            size={32}
+            size={20}
             style={tw('text-[#570606]')}
           />
         </TouchableOpacity>
@@ -42,7 +42,7 @@ const NavBar = () => {
             >
               <FontAwesomeIcon
                 icon={faUserCircle}
-                size={32}
+                size={20}
                 style={tw('text-[#570606]')}
               />
             </TouchableOpacity>
@@ -56,7 +56,7 @@ const NavBar = () => {
           >
             <FontAwesomeIcon
               icon={faSignIn}
-              size={32}
+              size={20}
               style={tw('text-[#570606]')}
             />
           </TouchableOpacity>
@@ -68,7 +68,7 @@ const NavBar = () => {
         >
           <FontAwesomeIcon
             icon={faTimeline}
-            size={32}
+            size={20}
             style={tw('text-[#570606]')}
           />
         </TouchableOpacity>
@@ -80,7 +80,7 @@ const NavBar = () => {
         >
           <FontAwesomeIcon
             icon={faSearchPlus}
-            size={32}
+            size={20}
             style={tw('text-[#570606]')}
           />
         </TouchableOpacity>

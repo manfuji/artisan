@@ -8,6 +8,7 @@ import Profile from './screens/Profile';
 import Recent from './screens/Recent';
 import Register from './screens/Register';
 import User from './screens/User';
+import CardDetail from './screens/CardDetail';
 
 const StackNavigator = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -22,6 +23,7 @@ const StackNavigator = () => {
       <stack.Screen name="user" component={Profile} />
       <stack.Screen name="prof" component={User} />
       <stack.Screen name="recent" component={Recent} />
+      <stack.Screen name="customerDetail" component={CardDetail} />
     </stack.Navigator>
   );
 };
