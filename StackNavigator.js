@@ -7,7 +7,7 @@ import Login from './screens/Login';
 import Profile from './screens/Profile';
 import Recent from './screens/Recent';
 import Register from './screens/Register';
-import User from './screens/User';
+import Search from './screens/Search';
 import CardDetail from './screens/CardDetail';
 
 const StackNavigator = () => {
@@ -21,7 +21,7 @@ const StackNavigator = () => {
       <stack.Screen name="DetailPage" component={DetailPage} />
       {/* authenticaed routers  */}
       <stack.Screen name="user" component={Profile} />
-      <stack.Screen name="prof" component={User} />
+      <stack.Screen name="search" component={Search} />
       <stack.Screen name="recent" component={Recent} />
       <stack.Screen name="customerDetail" component={CardDetail} />
     </stack.Navigator>

@@ -72,9 +72,7 @@ const Login = () => {
         <Image source={Logo} style={tw('h-44 w-44 rounded-full')} />
         <Text style={tw('text-red-800 text-4xl font-bold mb-4')}>Login</Text>
         <View style={tw('w-full flex')}>
-          <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
-            Username:
-          </Text>
+          <Text style={tw('text-xl  my-1 text-gray-700')}>Username:</Text>
           <TextInput
             style={tw(
               'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
@@ -85,9 +83,7 @@ const Login = () => {
           />
         </View>
         <View style={tw('w-full flex')}>
-          <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
-            Password:
-          </Text>
+          <Text style={tw('text-xl  my-1 text-gray-700')}>Password:</Text>
           <TextInput
             style={tw(
               'py-2 w-full border bg-gray-100 rounded-xl text-gray-600 px-4 border-gray-200'
@@ -111,7 +107,7 @@ const Login = () => {
               }}
             >
               <Text
-                style={tw('text-white text-center font-bold text-2xl py-2 ')}
+                style={tw('text-white text-center font-semibold text-xl py-2 ')}
               >
                 Login
               </Text>

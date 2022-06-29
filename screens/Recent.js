@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { useTailwind } from 'tailwind-rn/dist';
-import HeroImage from '../assets/images/cover2.jpg';
+import HeroImage from '../assets/logo2.jpg';
 import shop1 from '../assets/images/shop3.jpg';
 import shop from '../assets/images/shop5.jpg';
 import Card from './Card';
@@ -31,7 +31,7 @@ const Recent = () => {
           style={tw('w-full h-[200px] flex justify-center items-center')}
           source={HeroImage}
         >
-          <Text style={tw('text-white text-4xl')}>[Recent]</Text>
+          {/* <Text style={tw('text-white text-4xl')}>[Recent]</Text> */}
         </ImageBackground>
         <View style={tw('mx-3 my-8')}>
           <View

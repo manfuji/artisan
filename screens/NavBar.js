@@ -76,7 +76,7 @@ const NavBar = () => {
         <TouchableOpacity
           style={tw('')}
           // onPress={() => navigator.navigate('Home')}
-          onPress={() => navigator.navigate('Login')}
+          onPress={() => navigator.navigate('search')}
         >
           <FontAwesomeIcon
             icon={faSearchPlus}

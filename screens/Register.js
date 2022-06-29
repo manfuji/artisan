@@ -90,9 +90,7 @@ const Register = () => {
             Register
           </Text>
           <View style={tw('w-full flex')}>
-            <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
-              Username:
-            </Text>
+            <Text style={tw('text-xl my-1 text-gray-700')}>Username:</Text>
             <TextInput
               style={tw(
                 'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
@@ -103,9 +101,7 @@ const Register = () => {
             />
           </View>
           <View style={tw('w-full flex')}>
-            <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
-              Email:
-            </Text>
+            <Text style={tw('text-xl my-1 text-gray-700')}>Email:</Text>
             <TextInput
               style={tw(
                 'py-2 w-full px-4 bg-gray-100 rounded-xl border border-gray-200'
@@ -116,9 +112,7 @@ const Register = () => {
             />
           </View>
           <View style={tw('w-full flex')}>
-            <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
-              Password:
-            </Text>
+            <Text style={tw('text-xl my-1 text-gray-700')}>Password:</Text>
             <TextInput
               style={tw(
                 'py-2 w-full border bg-gray-100 rounded-xl text-gray-600 px-4 border-gray-200'
@@ -130,7 +124,7 @@ const Register = () => {
             />
           </View>
           <View style={tw('w-full flex')}>
-            <Text style={tw('text-2xl font-semibold my-1 text-gray-700')}>
+            <Text style={tw('text-xl my-1 text-gray-700')}>
               Confirm Password:
             </Text>
             <TextInput
@@ -163,9 +157,7 @@ const Register = () => {
                 style={tw('bg-[#570606] mt-6 rounded-xl')}
                 onPress={() => handleSubmit()}
               >
-                <Text
-                  style={tw('text-white text-center font-bold text-2xl py-2 ')}
-                >
+                <Text style={tw('text-white text-center  text-2xl py-2 ')}>
                   Register
                 </Text>
               </TouchableOpacity>
