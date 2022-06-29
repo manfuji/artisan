@@ -18,6 +18,7 @@ import { useTailwind } from 'tailwind-rn/dist';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faBackward,
+  faChevronDown,
   faLocationPin,
   faMagnifyingGlass,
   faMapLocation,
@@ -30,13 +31,25 @@ import NavBar from './NavBar';
 import { useNavigation } from '@react-navigation/native';
 import { useStateValue } from '../context/StateContext';
 import { AirbnbRating } from 'react-native-ratings';
+import SelectDropdown from 'react-native-select-dropdown';
 
 const DetailPage = () => {
+  //towns decalrations
+  const towns = [
+    'Ho',
+    'Hohoe',
+    'Dambai',
+    'Akatsi',
+    'Accra',
+    'Sogakofe',
+    'Anloga',
+  ];
   const navigation = useNavigation();
   const [{ company }, dispatch] = useStateValue();
 
   // useEffect(() => {
   const stateData = navigation.getState().routes[1];
+  const [location, setLocation] = useState('');
   // }, []);
   // picking id from the pass data
   console.log(stateData.params.catdetail);
@@ -53,37 +66,42 @@ const DetailPage = () => {
   const searchData = getDataFromState.filter((data) =>
     data.name.toLowerCase().includes(search.toLowerCase())
   );
-  const tw = useTailwind();
-  const rating = (rate) => {
-    const displayRate = [];
-    // return()
-    for (let index = 1; index <= rate; index++) {
-      displayRate.push(
-        <FontAwesomeIcon
-          // key={index}
-          style={tw(' flex flex-row text-[#570606] m-1')}
-          icon={faStar}
-          key={index}
-        />
-      );
-    }
-    return displayRate;
-  };
+  const locationData = getDataFromState.filter((data) =>
+    data?.location.toLowerCase().includes(location.toLowerCase())
+  );
 
-  const UnRated = (rateNo) => {
-    const unRated = [];
-    // return()
-    for (let index = 1; index <= rateNo; index++) {
-      unRated.push(
-        <FontAwesomeIcon
-          style={tw(' flex flex-row text-green-600 m-1 opacity-80')}
-          icon={faStar}
-          key={index}
-        />
-      );
-    }
-    return unRated;
-  };
+  // console.log('data', location);
+  const tw = useTailwind();
+  // const rating = (rate) => {
+  //   const displayRate = [];
+  // return()
+  //   for (let index = 1; index <= rate; index++) {
+  //     displayRate.push(
+  //       <FontAwesomeIcon
+  //         // key={index}
+  //         style={tw(' flex flex-row text-[#570606] m-1')}
+  //         icon={faStar}
+  //         key={index}
+  //       />
+  //     );
+  //   }
+  //   return displayRate;
+  // };
+
+  // const UnRated = (rateNo) => {
+  //   const unRated = [];
+  //   // return()
+  //   for (let index = 1; index <= rateNo; index++) {
+  //     unRated.push(
+  //       <FontAwesomeIcon
+  //         style={tw(' flex flex-row text-green-600 m-1 opacity-80')}
+  //         icon={faStar}
+  //         key={index}
+  //       />
+  //     );
+  //   }
+  //   return unRated;
+  // };
   return (
     <SafeAreaView style={tw('w-full h-full flex pt-6')}>
       <ScrollView style={tw('w-full h-full')}>
@@ -120,15 +138,50 @@ const DetailPage = () => {
               placeholder="using your current Location"
               onChangeText={(text) => setSearch(text)}
             />
-            <FontAwesomeIcon
+            {/* <FontAwesomeIcon
               size={12}
               icon={faLocationPin}
               style={tw(
                 'flex flex-row -ml-6 text-[#570606] py-6 px-2 rounded-r-xl'
               )}
-            />
+            /> */}
           </View>
-          <View style={tw('w-full')}></View>
+          <View style={tw('w-full justify-center items-center mt-2')}>
+            <View
+              style={tw('flex flex-row justify-center items-center font-bold ')}
+            >
+              <Text style={tw('text-xl ')}>Available In</Text>
+              <SelectDropdown
+                data={towns}
+                onSelect={(selectedItem, index) => {
+                  setLocation(selectedItem);
+                  // console.log(selectedItem, index);
+                }}
+                defaultButtonText={<Text style={tw('')}>Pick Location</Text>}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  // text represented after item is selected
+                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  // text represented for each item in dropdown
+                  // if data array is an array of objects then return item.property to represent item in dropdown
+                  return item;
+                }}
+                buttonTextStyle={tw(
+                  'p-2 rounded bg-gray-200 text-lg text-gray-800'
+                )}
+                dropdownStyle={tw(
+                  'justify-center bg-gray-200 rounded-lg text-gray-800'
+                )}
+              />
+              <FontAwesomeIcon
+                style={tw('-ml-8 text-gray-600 mt-1')}
+                icon={faChevronDown}
+                size={10}
+              />
+            </View>
+          </View>
           <Text style={tw('mt-6 text-2xl font-semibold mr-4')}>
             Nearest To You{' '}
             <FontAwesomeIcon
@@ -164,7 +217,7 @@ const DetailPage = () => {
                         {data.name.substr(0, 20)}
                       </Text>
                       <Text style={tw('text-gray-400 font-semibold')}>
-                        @Aunty
+                        @{data.Owner.user.username}
                       </Text>
                       <Text style={tw('text-lg')}>
                         {data.description.substr(0, 20)}...
@@ -189,6 +242,7 @@ const DetailPage = () => {
                           size={20}
                           isDisabled
                         />
+                        <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
                       </View>
                       <View
                         style={tw('w-full flex justify-center items-center')}
@@ -210,7 +264,7 @@ const DetailPage = () => {
                   </TouchableOpacity>
                 ))
               ) : (
-                getDataFromState.map((data) => (
+                locationData.map((data) => (
                   <TouchableOpacity
                     key={data.id}
                     style={tw('border border-gray-200 ml-1 rounded-xl')}
@@ -229,7 +283,7 @@ const DetailPage = () => {
                         {data.name.substr(0, 20)}
                       </Text>
                       <Text style={tw('text-gray-400 font-semibold')}>
-                        @Aunty
+                        @{data.Owner.user.username}
                       </Text>
                       <Text style={tw('text-lg')}>
                         {data.description.substr(0, 20)}...
@@ -254,6 +308,7 @@ const DetailPage = () => {
                           size={20}
                           isDisabled
                         />
+                        <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
                       </View>
                       <View
                         style={tw('w-full flex justify-center items-center')}
@@ -303,7 +358,7 @@ const DetailPage = () => {
                             {data.name.substr(0, 20)}
                           </Text>
                           <Text style={tw('text-gray-400 font-semibold')}>
-                            @Aunty
+                            @{data.Owner.user.username}
                           </Text>
                           <Text style={tw('text-lg')}>
                             {' '}
@@ -329,6 +384,7 @@ const DetailPage = () => {
                               size={20}
                               isDisabled
                             />
+                            <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
                           </View>
                           <View
                             style={tw(
@@ -359,7 +415,10 @@ const DetailPage = () => {
               ) : (
                 getDataFromState.map(
                   (data) =>
-                    data.rating >= 4 && (
+                    data.rating >= 4 &&
+                    data.location
+                      .toLowerCase()
+                      .includes(location.toLowerCase()) && (
                       <View
                         key={data.id}
                         style={tw('border border-gray-200 ml-1 rounded-xl')}
@@ -375,7 +434,7 @@ const DetailPage = () => {
                             {data.name.substr(0, 20)}
                           </Text>
                           <Text style={tw('text-gray-400 font-semibold')}>
-                            @Aunty
+                            @{data.Owner.user.username}
                           </Text>
                           <Text style={tw('text-lg')}>
                             {' '}
@@ -401,6 +460,7 @@ const DetailPage = () => {
                               size={20}
                               isDisabled
                             />
+                            <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
                           </View>
                           <View
                             style={tw(

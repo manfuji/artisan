@@ -87,8 +87,8 @@ const HomePage = () => {
             <Text style={tw('text-red-800 flex text-2xl text-center   ')}>
               Welcome To ArtisanHub
             </Text>
-            <Text style={tw('font-normal text-lg text-red-600')}>
-              Precition Quality Trained and Service Providers
+            <Text style={tw('font-normal text-center text-sm text-red-600')}>
+              Precition Quality Trained
             </Text>
           </View>
         </View>
@@ -130,8 +130,8 @@ const HomePage = () => {
           {/* displaying card for the categories */}
           {loading ? (
             <View style={tw(' mt-4')}>
-              {/* <ActivityIndicator size="large" color="#570606" /> */}
-              <Progress.CircleSnail color={['red', 'green', 'blue']} />
+              <ActivityIndicator size="large" color="#570606" />
+              {/* <Progress.CircleSnail color={['red', 'green', 'blue']} /> */}
             </View>
           ) : (
             <View

@@ -8,6 +8,7 @@ import {
   Linking,
   TextInput,
   Button,
+  SafeAreaView,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +21,7 @@ import {
   faStar,
   faMailBulk,
   faBackward,
+  faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import TimeAgo from 'react-native-timeago';
 import { AirbnbRating, Rating } from 'react-native-ratings';
@@ -48,7 +50,7 @@ const CardDetail = () => {
   // console.log('detailded data', stateData);
   // useEffect(() => {
 
-  // }, []);
+  // }, []);reciever
   const categoryData = stateData.params.details;
   // console.log(categoryData);
   const baseUrl = 'https://artisanshub.pythonanywhere.com';
@@ -71,7 +73,11 @@ const CardDetail = () => {
         Toast.show(err.message);
       });
   }, []);
-  console.log(userReview);
+  console.log('data', userReview);
+
+  userReview.map((res) => {
+    console.log(res.reciever.reviews);
+  });
 
   // code for rating
   const rating = (rate) => {
@@ -119,9 +125,10 @@ const CardDetail = () => {
     };
     console.log(body);
   };
+  //caculating users reviews
 
   return (
-    <View style={tw('pt-6 w-full h-full')}>
+    <SafeAreaView style={tw('pt-6 w-full h-full')}>
       <ScrollView style={tw('w-full h-full')}>
         <ImageBackground
           style={tw('w-full h-[200px] rounded-lg flex justify-end ')}
@@ -159,21 +166,23 @@ const CardDetail = () => {
           />
         </View>
         <View style={tw('w-[90%] mx-auto -mt-10')}>
-          <View
-            style={tw(
-              ' mb-6 mt-8 h-8 flex flex-row justify-center items-center '
-            )}
-          >
+          <View style={tw(' mb-6 mt-4 h-8 flex flex-row  ')}>
             <AirbnbRating
               count={5}
               reviews={[]}
-              defaultRating={categoryData.rating}
+              defaultRating={categoryData.Owner.rating}
               // onFinishRating={ratingCompleted}
               size={20}
               isDisabled
               starContainerStyle={tw('flex justify-center')}
             />
-            <Text style={tw('text-base -mb-2')}>({categoryData.rating})</Text>
+            <Text style={tw('text-base -mb-2 mt-4 ')}>
+              (
+              {userReview.map((reviews) => (
+                <Text style={tw('')}>{reviews.reciever.reviews}</Text>
+              ))}
+              )
+            </Text>
           </View>
           <View style={tw('w-full flex justify-center items-center mb-4')}>
             <TouchableOpacity
@@ -285,12 +294,8 @@ const CardDetail = () => {
           </Text>
           {/* displaying reviews */}
           <View style={tw('w-[90%] mt-4')}>
-            <Text
-              style={tw(
-                'text-2xl font-bold flex justify-center items-center text-center '
-              )}
-            >
-              Reviews
+            <Text style={tw('text-2xl font-bold flex  text-center ')}>
+              Reviews And Ratings
             </Text>
 
             {userReview.length > 0 ? (
@@ -306,13 +311,25 @@ const CardDetail = () => {
                 </View>
               ))
             ) : (
-              <Text>No Review</Text>
+              <Text style={tw('text-2xl font-bold my-3 flex flex-row')}>
+                <FontAwesomeIcon
+                  icon={faInfoCircle}
+                  size={20}
+                  style={tw('text-gray-700')}
+                />{' '}
+                No Review,be the first
+              </Text>
             )}
-            <Button
-              title="See More Review"
-              color="#570606"
-              onPress={toggleModal}
-            />
+            {userReview.length < 1 ? (
+              <Text>""</Text>
+            ) : (
+              <Button
+                title="See More Review"
+                color="#570606"
+                onPress={toggleModal}
+              />
+            )}
+
             <Modal isVisible={isModalVisible} animationIn="wobble">
               <View style={tw('w-full bg-gray-200 flex-1 ')}>
                 <View style={tw('mb-5 ')}>
@@ -335,23 +352,14 @@ const CardDetail = () => {
             </Modal>
           </View>
           <View style={tw('w-[90%] mx-auto mt-6')}>
-            <View style={tw('justify-center items-center')}>
-              <Text
-                style={tw(
-                  'uppercase font-semibold text-lg justify-center p-1 rounded items-center text-center mb-5 border'
-                )}
-              >
-                Rate Service
-              </Text>
-            </View>
             {/* rating review code */}
             {/* <Button
               title="Write Review"
               color="#570606"
               onPress={toggleComment}
             /> */}
-            <Modal isVisible={isCommentVisible} animationIn="slideOutUp">
-              <View style={tw('w-full h-2/3 rounded-xl bg-gray-200 p-4 ')}>
+            <Modal isVisible={isCommentVisible}>
+              <View style={tw('w-full h-2/3 rounded-xl bg-gray-200  pb-6')}>
                 <View style={tw('mb-5 ')}>
                   <Button
                     title="Close"
@@ -396,7 +404,7 @@ const CardDetail = () => {
         </View>
       </ScrollView>
       <NavBar />
-    </View>
+    </SafeAreaView>
   );
 };
 
