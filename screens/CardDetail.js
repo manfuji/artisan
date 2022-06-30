@@ -9,6 +9,7 @@ import {
   TextInput,
   Button,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -30,10 +31,11 @@ import ReviewCard from './ReviewCard';
 import logo1 from '../assets/logo.jpg';
 import axios from 'axios';
 import Toast from 'react-native-simple-toast';
+import { useStateValue } from '../context/StateContext';
 const CardDetail = () => {
   // creating comment toggle
   const [isCommentVisible, setCommentVisible] = useState(false);
-
+  const [{ user }, dispatch] = useStateValue();
   const toggleComment = () => {
     setCommentVisible(!isCommentVisible);
   };
@@ -57,6 +59,8 @@ const CardDetail = () => {
 
   // fetching the reviews
   const [userReview, setUserReview] = useState([]);
+
+  const TimeInMin = 30000;
   useEffect(() => {
     axios
       .get(
@@ -67,67 +71,77 @@ const CardDetail = () => {
           setUserReview([]);
         } else {
           setUserReview(res.data);
+          // console.log(res.data);
         }
       })
       .catch((err) => {
         Toast.show(err.message);
       });
+    const interval = setInterval(() => {
+      axios
+        .get(
+          `https://artisanshub.pythonanywhere.com/api/reviews/${categoryData.Owner.id}/`
+        )
+        .then((res) => {
+          if (res.data.status === 'failed') {
+            setUserReview([]);
+          } else {
+            setUserReview(res.data);
+            // console.log(res.data);
+          }
+        })
+        .catch((err) => {
+          Toast.show(err.message);
+        });
+    }, TimeInMin);
+    return () => clearInterval(interval);
   }, []);
-  console.log('data', userReview);
+  // console.log(user);
 
-  userReview.map((res) => {
-    console.log(res.reciever.reviews);
-  });
-
-  // code for rating
-  const rating = (rate) => {
-    const displayRate = [];
-    // return()
-    for (let index = 1; index <= rate; index++) {
-      displayRate.push(
-        <FontAwesomeIcon
-          // key={index}
-          style={tw(' flex flex-row text-[#570606] m-1')}
-          icon={faStar}
-          key={index}
-        />
-      );
-    }
-    return displayRate;
-  };
-
-  const UnRated = (rateNo) => {
-    const unRated = [];
-    // return()
-    for (let index = 1; index <= rateNo; index++) {
-      unRated.push(
-        <FontAwesomeIcon
-          style={tw(' flex flex-row text-green-600 m-1 opacity-80')}
-          icon={faStar}
-          key={index}
-        />
-      );
-    }
-    return unRated;
-  };
   // creating review of the services provided
-  const [comment, setComment] = useState('');
-  const [userRating, setUserRating] = useState(0);
+  const [comment, setComment] = useState(''),
+    [userRating, setUserRating] = useState(0),
+    [loading, setLoading] = useState(false);
 
+  const reciever = categoryData.Owner.id;
+  const sender = user?.user.id;
   const ratingCompleted = (rating) => {
     console.log('Rating is: ' + rating);
     setUserRating(rating);
   };
   const handleSubmit = () => {
-    const body = {
-      userRating,
-      comment,
-    };
-    console.log(body);
+    setLoading(true);
+    if (!user) {
+      navigation.navigate('Login');
+    } else {
+      const body = {
+        rating: userRating,
+        comment,
+        sender,
+        reciever,
+      };
+      const url = 'https://artisanshub.pythonanywhere.com/api/reviews/';
+      axios
+        .post(url, body)
+        .then((res) => {
+          setLoading(false);
+          // setSentReview(...res.data);
+          console.log(res.data);
+          Toast.show('Review Successful', Toast.LONG);
+        })
+        .catch((err) => {
+          Toast.show(err.message);
+          setLoading(false);
+          console.log(err);
+          Toast.show('Something Went Wrong', Toast.LONG);
+        });
+      console.log(body);
+    }
   };
+  //artisanshub.pythonanywhere.com/api/reviews/
   //caculating users reviews
-
-  return (
+  console.log(userReview);
+  https: return (
     <SafeAreaView style={tw('pt-6 w-full h-full')}>
       <ScrollView style={tw('w-full h-full')}>
         <ImageBackground
@@ -142,14 +156,29 @@ const CardDetail = () => {
           >
             <FontAwesomeIcon icon={faBackward} style={tw('text-white')} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={toggleComment}
-            style={tw(
-              'bg-orange-500 rounded-xl w-32 justify-center items-center m-2 text-white py-3 px-1'
-            )}
-          >
-            <Text style={tw('text-white font-bold')}>Write Review</Text>
-          </TouchableOpacity>
+          {!user ? (
+            <TouchableOpacity
+              style={tw('')}
+              onPress={() => navigation.navigate('Login')}
+            >
+              <Text
+                style={tw(
+                  'bg-black opacity-90 w-1/2 text-center text-lg mb-4 ml-1 rounded text-white font-bold'
+                )}
+              >
+                Login To Add Review
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={toggleComment}
+              style={tw(
+                'bg-orange-500 rounded-xl w-32 justify-center items-center m-2 text-white py-3 px-1'
+              )}
+            >
+              <Text style={tw('text-white font-bold')}>Write Review</Text>
+            </TouchableOpacity>
+          )}
         </ImageBackground>
         <View style={tw('flex flex-row justify-between w-[90%] mb-4 mt-2')}>
           <Text style={tw('text-gray-900 text-base font-bold w-2/3 ml-4')}>
@@ -177,11 +206,12 @@ const CardDetail = () => {
               starContainerStyle={tw('flex justify-center')}
             />
             <Text style={tw('text-base -mb-2 mt-4 ')}>
-              (
+              {/* (
               {userReview.map((reviews) => (
-                <Text style={tw('')}>{reviews.reciever.reviews}</Text>
+                <Text style={tw('')}>{parseInt(reviews.reciever.reviews)}</Text>
               ))}
-              )
+              ) */}
+              ({categoryData.Owner.rating})
             </Text>
           </View>
           <View style={tw('w-full flex justify-center items-center mb-4')}>
@@ -199,7 +229,7 @@ const CardDetail = () => {
           <View style={tw('justify-center items-center')}>
             <Text
               style={tw(
-                'uppercase font-semibold text-lg justify-center p-1 rounded items-center text-center mb-5 border'
+                'uppercase  text-lg justify-center p-1 rounded items-center text-center mb-5 border'
               )}
             >
               Shop Description
@@ -211,14 +241,14 @@ const CardDetail = () => {
           <View style={tw('justify-center items-center')}>
             <Text
               style={tw(
-                'uppercase font-semibold text-lg justify-center p-1 rounded items-center text-center mb-5 border'
+                'uppercase  text-lg justify-center p-1 rounded items-center text-center mb-5 border'
               )}
             >
               Contact Information
             </Text>
           </View>
 
-          <Text style={tw('font-semibold')}>
+          <Text style={tw('')}>
             <Text style={tw('font-bold pr-2 text-lg')}>
               {/* <FontAwesomeIcon icon={faMailBulk} size={16} />: */}
               Email:{' '}
@@ -227,7 +257,7 @@ const CardDetail = () => {
               {categoryData.Owner.user.email || 'No Contact Email'}
             </Text>
           </Text>
-          <Text style={tw('font-semibold mt-2')}>
+          <Text style={tw(' mt-2')}>
             <Text style={tw('text-xl font-bold pl-2')}>Phone: </Text>
             <Text style={tw('font-bold m-2 text-base')}>
               {categoryData.phone || 'No Contact Number'}
@@ -239,48 +269,47 @@ const CardDetail = () => {
           <View style={tw('justify-center items-center')}>
             <Text
               style={tw(
-                'uppercase font-semibold text-lg justify-center p-1 rounded items-center text-center mb-5 border'
+                'uppercase  text-lg justify-center p-1 rounded items-center text-center mb-5 border'
               )}
             >
               Owner's Details
             </Text>
           </View>
 
-          <Text style={tw('font-semibold')}>
+          <Text style={tw('')}>
             <Text style={tw('font-bold pr-2 text-lg')}>First Name: </Text>
             <Text style={tw('pr-2 font-bold text-base capitalize')}>
               {categoryData.Owner.user.first_name || 'No First Name'}
             </Text>
           </Text>
-          <Text style={tw('font-semibold mt-2')}>
+          <Text style={tw(' mt-2')}>
             <Text style={tw('text-xl font-bold pl-2 ')}>Last Name: </Text>
             <Text style={tw('font-bold m-2 text-base capitalize')}>
               {categoryData.Owner.user.last_name || 'No Last Name'}
             </Text>
           </Text>
-          <View style={tw('font-semibold mt-2 flex flex-row')}>
-            <Text style={tw('text-xl font-bold pl-2 ')}>Rating: </Text>
-            <View style={tw('font-bold  text-base capitalize')}>
-              <View style={tw(' text-[#570606]')}>
-                {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                {/* {rating(categoryData.rating)}
+          <View style={tw(' mt-2 flex flex-row')}>
+            <Text style={tw('text-xl font-bold ')}>Rating: </Text>
+
+            <View style={tw(' text-[#570606]')}>
+              {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
+              {/* {rating(categoryData.rating)}
                 {UnRated(5 - categoryData.rating)} */}
-                <View style={tw(' px-1')}>
-                  <AirbnbRating
-                    count={5}
-                    reviews={[]}
-                    defaultRating={categoryData.rating}
-                    // onFinishRating={ratingCompleted}
-                    size={20}
-                    showRating={false}
-                    isDisabled
-                    starContainerStyle={tw('mt-1')}
-                  />
-                </View>
+              <View style={tw(' px-1')}>
+                <AirbnbRating
+                  count={5}
+                  reviews={[]}
+                  defaultRating={categoryData.Owner.rating}
+                  // onFinishRating={ratingCompleted}
+                  size={20}
+                  showRating={false}
+                  isDisabled
+                  starContainerStyle={tw('mt-1')}
+                />
               </View>
             </View>
           </View>
-          <Text style={tw('font-semibold mt-2')}>
+          <Text style={tw(' mt-2')}>
             <Text style={tw('text-xl font-bold pl-2 ')}>Working since: </Text>
             <Text style={tw('font-bold m-2 text-base capitalize')}>
               <View
@@ -293,18 +322,19 @@ const CardDetail = () => {
             </Text>
           </Text>
           {/* displaying reviews */}
-          <View style={tw('w-[90%] mt-4')}>
+          <View style={tw('w-[98%] mx-auto mt-4')}>
             <Text style={tw('text-2xl font-bold flex  text-center ')}>
               Reviews And Ratings
             </Text>
 
             {userReview.length > 0 ? (
               userReview?.slice(0, 3).map((review) => (
-                <View style={tw('')}>
+                <View style={tw('')} key={review.id}>
                   <ReviewCard
+                    date={review.created_on}
                     key={review.id}
                     name={review.sender.user.username}
-                    picture={logo1}
+                    picture={review.sender.user.image}
                     content={review.comment}
                     review={review.rating}
                   />
@@ -335,18 +365,21 @@ const CardDetail = () => {
                 <View style={tw('mb-5 ')}>
                   <Button title="Close" onPress={toggleModal} color="#570606" />
                 </View>
-                <ScrollView style={tw('px-4')}>
-                  {userReview.map((review) => (
-                    <View style={tw('')}>
-                      <ReviewCard
-                        key={review.id}
-                        name={review.sender.user.username}
-                        picture={logo1}
-                        content={review.comment}
-                        review={4}
-                      />
-                    </View>
-                  ))}
+                <ScrollView>
+                  <View style={tw('px-4 items-center w-full')}>
+                    {userReview.map((review) => (
+                      <View style={tw('w-full')} key={review.id}>
+                        <ReviewCard
+                          date={review.created_on}
+                          key={review.id}
+                          name={review.sender.user.username}
+                          picture={logo1}
+                          content={review.comment}
+                          review={4}
+                        />
+                      </View>
+                    ))}
+                  </View>
                 </ScrollView>
               </View>
             </Modal>
@@ -389,15 +422,18 @@ const CardDetail = () => {
                   value={comment}
                   onChangeText={(text) => setComment(text)}
                 />
-
-                <TouchableOpacity
-                  onPress={() => handleSubmit()}
-                  style={tw(
-                    'bg-green-600 justify-center mt-8 items-center w-full px-1 py-3 rounded-xl'
-                  )}
-                >
-                  <Text style={tw('text-base text-white')}>Rate</Text>
-                </TouchableOpacity>
+                {loading ? (
+                  <ActivityIndicator color="#570606" size="large" />
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => handleSubmit()}
+                    style={tw(
+                      'bg-green-600 justify-center mt-8 items-center w-full px-1 py-3 rounded-xl'
+                    )}
+                  >
+                    <Text style={tw('text-base text-white')}>Rate</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </Modal>
           </View>

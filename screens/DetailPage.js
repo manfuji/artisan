@@ -224,8 +224,8 @@ const DetailPage = () => {
                       </Text>
                       <View style={tw('flex flex-row text-[#570606]')}>
                         {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                        {/* {rating(data.rating)}
-                        {UnRated(5 - data.rating)} */}
+                        {/* {rating(data.Owner.rating)}
+                        {UnRated(5 - data.Owner.rating)} */}
                         <AirbnbRating
                           count={5}
                           // reviews={[
@@ -237,12 +237,14 @@ const DetailPage = () => {
                           //   'Amazing',
                           // ]}
                           showRating={false}
-                          defaultRating={data.rating}
+                          defaultRating={data.Owner.rating}
                           // onFinishRating={ratingCompleted}
                           size={20}
-                          isDisabled
+                          isDisabledrating
                         />
-                        <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
+                        <Text style={tw('ml-2 mt-1')}>
+                          ({data.Owner.rating})
+                        </Text>
                       </View>
                       <View
                         style={tw('w-full flex justify-center items-center')}
@@ -290,8 +292,8 @@ const DetailPage = () => {
                       </Text>
                       <View style={tw('flex flex-row text-[#570606]')}>
                         {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                        {/* {rating(data.rating)}
-                        {UnRated(5 - data.rating)} */}
+                        {/* {rating(data.Owner.rating)}
+                        {UnRated(5 - data.Owner.rating)} */}
                         <AirbnbRating
                           count={5}
                           // reviews={[
@@ -303,12 +305,14 @@ const DetailPage = () => {
                           //   'Amazing',
                           // ]}
                           showRating={false}
-                          defaultRating={data.rating}
+                          defaultRating={data.Owner.rating}
                           // onFinishRating={ratingCompleted}
                           size={20}
                           isDisabled
                         />
-                        <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
+                        <Text style={tw('ml-2 mt-1')}>
+                          ({data.Owner.rating})
+                        </Text>
                       </View>
                       <View
                         style={tw('w-full flex justify-center items-center')}
@@ -342,7 +346,7 @@ const DetailPage = () => {
               ) : search.length > 0 ? (
                 searchData.map(
                   (data) =>
-                    data.rating >= 4 && (
+                    data.Owner.rating >= 4 && (
                       <View
                         key={data.id}
                         style={tw('border border-gray-200 ml-1 rounded-xl')}
@@ -366,8 +370,8 @@ const DetailPage = () => {
                           </Text>
                           <View style={tw('flex flex-row text-[#570606]')}>
                             {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                            {/* {rating(data.rating)}
-                            {UnRated(5 - data.rating)} */}
+                            {/* {rating(data.Owner.rating)}
+                            {UnRated(5 - data.Owner.rating)} */}
                             <AirbnbRating
                               count={5}
                               showRating={false}
@@ -379,12 +383,14 @@ const DetailPage = () => {
                               //   'Very Good',
                               //   'Amazing',
                               // ]}
-                              defaultRating={data.rating}
+                              defaultRating={data.Owner.rating}
                               // onFinishRating={ratingCompleted}
                               size={20}
                               isDisabled
                             />
-                            <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
+                            <Text style={tw('ml-2 mt-1')}>
+                              ({data.Owner.rating})
+                            </Text>
                           </View>
                           <View
                             style={tw(
@@ -415,7 +421,7 @@ const DetailPage = () => {
               ) : (
                 getDataFromState.map(
                   (data) =>
-                    data.rating >= 4 &&
+                    data.Owner.rating >= 4 &&
                     data.location
                       .toLowerCase()
                       .includes(location.toLowerCase()) && (
@@ -442,8 +448,8 @@ const DetailPage = () => {
                           </Text>
                           <View style={tw('flex flex-row text-[#570606]')}>
                             {/* <FontAwesomeIcon style={tw('')} icon={faStar} /> */}
-                            {/* {rating(data.rating)}
-                            {UnRated(5 - data.rating)} */}
+                            {/* {rating(data.Owner.rating)}
+                            {UnRated(5 - data.Owner.rating)} */}
                             <AirbnbRating
                               count={5}
                               // reviews={[
@@ -455,12 +461,14 @@ const DetailPage = () => {
                               //   'Amazing',
                               // ]}
                               showRating={false}
-                              defaultRating={data.rating}
+                              defaultRating={data.Owner.rating}
                               // onFinishRating={ratingCompleted}
                               size={20}
                               isDisabled
                             />
-                            <Text style={tw('ml-2 mt-1')}>({data.rating})</Text>
+                            <Text style={tw('ml-2 mt-1')}>
+                              ({data.Owner.rating})
+                            </Text>
                           </View>
                           <View
                             style={tw(
