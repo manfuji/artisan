@@ -24,11 +24,15 @@ import * as Progress from 'react-native-progress';
 const HomePage = () => {
   const [{ user, company }, dispatch] = useStateValue();
   const [category, setCategory] = useState([]),
-    [loading, setLoading] = useState(false),
-    [loadData, setLoadData] = useState(false);
-  // [company, setCompany] = useState([]);
+    [loading, setLoading] = useState(true),
+    [loadData, setLoadData] = useState(false),
+    [userCompany, setUserCompany] = useState([]);
+  const baseUrl = 'https://artisanshub.pythonanywhere.com';
   useEffect(() => {
-    setLoading(true);
+    loadDataFromServer();
+  }, []);
+  const loadDataFromServer = () => {
+    // setLoading(true);
     axios
       .get('https://artisanshub.pythonanywhere.com/api/categories/')
       .then((res) => {
@@ -44,11 +48,11 @@ const HomePage = () => {
 
     // fetching companies
     axios
-      .get('https://artisanshub.pythonanywhere.com/api/companies/')
+      .get('https://artisanshub.pythonanywhere.com/api/companies')
       .then((res) => {
         setLoading(false);
         setLoadData(false);
-
+        setUserCompany(res.data);
         dispatch({
           type: COMPANY,
           companies: res.data,
@@ -60,22 +64,27 @@ const HomePage = () => {
 
         Toast.show(Toast.TOP, Toast.LONG, 'Something went wrong');
       });
-  }, [loadData]);
-  // console.log(company);
+  };
+  const featuredData = userCompany.filter((data) => data.is_featured === true);
   const navigator = useNavigation();
   const tw = useTailwind();
+  console.log(featuredData);
+
   return (
     <SafeAreaView style={tw('w-full h-full flex pt-6')}>
       <ScrollView
         style={tw('w-full h-full ')}
         refreshControl={
-          <RefreshControl refreshing={loadData} onRefresh={loadData} />
+          <RefreshControl
+            refreshing={loadData}
+            onRefresh={loadDataFromServer}
+          />
         }
       >
-        <View style={tw('flex w-full h-[200px] flex-row justify-between')}>
+        <View style={tw('flex w-full h-[150px] flex-row justify-between')}>
           <Image
             style={tw(
-              'w-1/2 h-[200px] rounded-lg flex justify-center items-center'
+              'w-1/2 h-[150px] rounded-lg flex justify-center items-center'
             )}
             source={HeroImage}
           />
@@ -84,7 +93,7 @@ const HomePage = () => {
               'w-1/2 h-full flex flex-col justify-center bg-white items-center'
             )}
           >
-            <Text style={tw('text-red-800 flex text-2xl text-center   ')}>
+            <Text style={tw('text-red-800 flex text-2xl text-center')}>
               Welcome To ArtisanHub
             </Text>
             <Text style={tw('font-normal text-center text-sm text-red-600')}>
@@ -93,38 +102,6 @@ const HomePage = () => {
           </View>
         </View>
 
-        <View style={tw('mx-5 hidden')}>
-          <Text style={tw('mt-6 text-2xl font-semibold ')}>Recent</Text>
-          <ScrollView horizontal={true}>
-            <View style={tw('w-full flex flex-row overflow-scroll hidden')}>
-              <TouchableOpacity
-                style={tw('')}
-                // onPress={() => navigator.navigate('DetailPage')}
-              >
-                <Image style={tw('w-64 h-32 m-1 rounded-md')} source={shop} />
-                <Text style={tw('text-base')}>Mechanic</Text>
-              </TouchableOpacity>
-              <View
-                style={tw('')}
-                // onPress={() => navigator.navigate('DetailPage')}
-              >
-                <Image style={tw('w-64 h-32 m-1 rounded-md')} source={shop1} />
-                <Text style={tw('text-base')}>Fuel Station</Text>
-              </View>
-              <View
-                style={tw('')}
-                // onPress={() => navigator.navigate('DetailPage')}
-              >
-                <Image style={tw('w-64 h-32 m-1 rounded-md')} source={shop} />
-                <Text style={tw('text-base')}>Mechanic</Text>
-              </View>
-              <View style={tw('m-1')}>
-                <Image style={tw('w-64 h-32  rounded-md')} source={HeroImage} />
-                <Text style={tw('text-base')}>Weaver</Text>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
         <View style={tw('mx-3')}>
           <Text style={tw('mt-6 text-2xl font-semibold mx-3')}>Service</Text>
           {/* displaying card for the categories */}
@@ -155,7 +132,7 @@ const HomePage = () => {
                       style={tw('w-24 h-24  rounded')}
                       source={{ uri: cat.image }}
                     />
-                    <Text style={tw(' text-center text-base mt-1 w-24 ')}>
+                    <Text style={tw(' text-justify text-sm mt-1 px-1 w-24 ')}>
                       {cat.title}
                     </Text>
                   </TouchableOpacity>
@@ -163,6 +140,30 @@ const HomePage = () => {
               ))}
             </View>
           )}
+        </View>
+        <View style={tw('mx-5 mt-3')}>
+          <Text style={tw('mb-2 text-xl font-semibold ')}>Featured Shops</Text>
+          <ScrollView horizontal={true}>
+            <View style={tw('w-full flex flex-row overflow-scroll ')}>
+              {featuredData.map((data) => (
+                <TouchableOpacity
+                  disabled
+                  style={tw('flex  justify-center w-28 rounded-md mr-2')}
+                  key={data.id}
+
+                  // onPress={() => navigator.navigate('DetailPage')}
+                >
+                  <Image
+                    style={tw('w-28 h-16  rounded-md')}
+                    source={{ uri: baseUrl + data.image }}
+                  />
+                  <Text style={tw('text-sm w-full ')}>
+                    {data.category.title.substr(0, 14)}...
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
         </View>
       </ScrollView>
       <NavBar />
