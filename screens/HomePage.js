@@ -94,7 +94,7 @@ const HomePage = () => {
             )}
           >
             <Text style={tw('text-red-800 flex text-2xl text-center')}>
-              Welcome To ArtisanHub
+              Welcome To ArtisansHub
             </Text>
             <Text style={tw('font-normal text-center text-sm text-red-600')}>
               Precition Quality Trained
@@ -160,7 +160,7 @@ const HomePage = () => {
                   />
 
                   <View style={tw('mx-2 ')}>
-                    <Text style={tw('text-lg font-semibold')}>
+                    <Text style={tw('text-sm font-semibold')}>
                       {data.name.substr(0, 14)}
                     </Text>
                   </View>

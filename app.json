@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "artisanHubgh",
-    "slug": "artisanHubgh",
+    "name": "artisansHubGH",
+    "slug": "artisansHubGH",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/palogo.png",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#570606"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,9 +23,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/palogo.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#570606"
       },
-      "package": "artisanhub.gh"
+      "package": "artisanhubS.gh"
     },
     "web": {
       "favicon": "./assets/favicon.png"
