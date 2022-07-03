@@ -9,6 +9,7 @@ import Recent from './screens/Recent';
 import Register from './screens/Register';
 import Search from './screens/Search';
 import CardDetail from './screens/CardDetail';
+import FeaturedData from './screens/Featured';
 
 const StackNavigator = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -24,6 +25,7 @@ const StackNavigator = () => {
       <stack.Screen name="search" component={Search} />
       <stack.Screen name="recent" component={Recent} />
       <stack.Screen name="customerDetail" component={CardDetail} />
+      <stack.Screen name="featured" component={FeaturedData} />
     </stack.Navigator>
   );
 };

@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "artisan",
-    "slug": "artisan",
+    "name": "artisanHubgh",
+    "slug": "artisanHubgh",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.jpg",
+    "icon": "./assets/palogo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -22,10 +22,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/palogo.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.manfuji.artisan"
+      "package": "artisanhub.gh"
     },
     "web": {
       "favicon": "./assets/favicon.png"

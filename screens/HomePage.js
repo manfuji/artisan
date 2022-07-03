@@ -147,19 +147,23 @@ const HomePage = () => {
             <View style={tw('w-full flex flex-row overflow-scroll ')}>
               {featuredData.map((data) => (
                 <TouchableOpacity
-                  disabled
-                  style={tw('flex  justify-center w-28 rounded-md mr-2')}
                   key={data.id}
-
-                  // onPress={() => navigator.navigate('DetailPage')}
+                  style={tw('border w-28 border-gray-200 ml-1 rounded-xl')}
+                  onPress={() =>
+                    navigator.navigate('featured', { details: data })
+                  }
                 >
                   <Image
-                    style={tw('w-28 h-16  rounded-md')}
+                    style={tw('w-28 h-16 m-1 rounded-md')}
                     source={{ uri: baseUrl + data.image }}
+                    resizeMode="cover"
                   />
-                  <Text style={tw('text-sm w-full ')}>
-                    {data.category.title.substr(0, 14)}...
-                  </Text>
+
+                  <View style={tw('mx-2 ')}>
+                    <Text style={tw('text-lg font-semibold')}>
+                      {data.name.substr(0, 14)}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               ))}
             </View>
