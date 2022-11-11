@@ -23,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/palogo.png",
-        "backgroundColor": "#570606"
+        "backgroundColor": "#FFFFFF"
       },
       "package": "artisanhubS.gh"
     },
